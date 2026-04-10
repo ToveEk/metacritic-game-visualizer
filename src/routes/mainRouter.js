@@ -1,7 +1,7 @@
 import express from 'express';
 import { homeRouter } from './homeRouter.js';
 import { registerRouter } from './registerRouter.js';
-import { loginRouter } from './loginRouter.js';
+import { loginRouter } from './authenticationRouter.js';
 
 export const router = express.Router();
 
