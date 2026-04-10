@@ -1,8 +1,16 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 export class OAuthService {
     constructor() {
         this.clientId = process.env.GITHUB_CLIENT_ID;
         this.clientSecret = process.env.GITHUB_CLIENT_SECRET;
         this.redirectUri = process.env.GITHUB_REDIRECT_URI;
+
+        console.log('OAuthService initialized with:');
+        console.log('Client ID:', this.clientId);
+        console.log('Client Secret:', this.clientSecret ? '***' : 'Not set');
+        console.log('Redirect URI:', this.redirectUri);
     }
 
     getAuthUrl() {
@@ -14,7 +22,8 @@ export class OAuthService {
         const response = await fetch('https://github.com/login/oauth/access_token', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({
                 client_id: this.clientId,
@@ -40,7 +49,25 @@ export class OAuthService {
 
     }
 
-    async getApiToken() {
-
+    async getApiToken(gitHubUser) {
+        const response = await fetch(`${process.env.WT1_API_URL}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                query: `
+                    mutation {
+                        loginWithGitHub(gitHubId: "${gitHubUser.id}", email: "${gitHubUser.email}"
+                    )   {
+                            token
+                        }
+                    }
+                `
+            })
+        });
+        const data = await response.json();
+        return data.data.loginWithGitHub.token;
     }
+
 }

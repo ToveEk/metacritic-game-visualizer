@@ -1,3 +1,5 @@
+import dotenv from 'dotenv'
+dotenv.config()
 
 import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
@@ -5,11 +7,7 @@ import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { router } from './routes/mainRouter.js'
 import { setBaseURL } from './middleware/setBaseURL.js'
-import dotenv from 'dotenv'
 import { errorHandler } from './middleware/errorHandler.js'
-
-// Load environment variables from .env file
-dotenv.config()
 
 try {
     // Initialize Express app

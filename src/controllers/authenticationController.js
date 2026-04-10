@@ -6,7 +6,13 @@ export class AuthenticationController {
     }
 
     renderLoginPage(req, res) {
-        res.render('login')
+        const state = Math.random().toString(36).substring(2); // Generate a random state parameter to prevent CSRF attacks
+
+        res.render('login', {
+            client_id: process.env.GITHUB_CLIENT_ID,
+            state
+        }
+        )
     }
 
     authenticateUser(req, res) {
@@ -22,6 +28,8 @@ export class AuthenticationController {
             const gitHubUserData = await this.oauthService.getGitHubUserData(accessToken);
             const jwt = await this.oauthService.getApiToken(gitHubUserData);
             
+            console.log('code:', code);
+
             res.redirect('/');
         } catch (error) {
             console.error('Error during OAuth callback:', error);
