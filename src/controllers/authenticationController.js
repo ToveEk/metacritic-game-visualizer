@@ -30,7 +30,7 @@ export class AuthenticationController {
 
             this.#setHttpOnlyCookie(res, jwt);
 
-            res.redirect('/');
+            res.redirect('/games');
         } catch (error) {
             console.error('Error during OAuth callback:', error);
             res.status(500).send('Authentication failed');
