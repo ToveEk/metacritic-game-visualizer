@@ -37,6 +37,15 @@ try {
     // Session management
     app.use(session(sessionOptions))
 
+    // Flash messages
+    app.use((req, res, next) => {
+        if (req.session.flash) {
+            res.locals.flash = req.session.flash
+            delete req.session.flash
+        }
+        next()
+    })
+
     // Set up routes (before static files so dynamic routes take precedence)
     app.use('/', router)
 
