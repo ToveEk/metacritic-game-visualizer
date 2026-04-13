@@ -6,11 +6,6 @@ export class OAuthService {
         this.clientId = process.env.GITHUB_CLIENT_ID;
         this.clientSecret = process.env.GITHUB_CLIENT_SECRET;
         this.redirectUri = process.env.GITHUB_REDIRECT_URI;
-
-        console.log('OAuthService initialized with:');
-        console.log('Client ID:', this.clientId);
-        console.log('Client Secret:', this.clientSecret ? '***' : 'Not set');
-        console.log('Redirect URI:', this.redirectUri);
     }
 
     getAuthUrl() {
@@ -44,7 +39,6 @@ export class OAuthService {
             }
         });
         const userData = await response.json();
-        console.log('GitHub user data:', userData);
         return userData;
 
     }
@@ -58,8 +52,7 @@ export class OAuthService {
             body: JSON.stringify({
                 query: `
                     mutation {
-                        loginWithGitHub(gitHubId: "${gitHubUser.id}", email: "${gitHubUser.email}"
-                    )   {
+                        loginWithGitHub(gitHubId: "${gitHubUser.id}", email: "${gitHubUser.email}") {
                             token
                         }
                     }
@@ -69,5 +62,4 @@ export class OAuthService {
         const data = await response.json();
         return data.data.loginWithGitHub.token;
     }
-
 }
