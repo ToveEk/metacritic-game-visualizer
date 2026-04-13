@@ -6,6 +6,7 @@ import expressLayouts from 'express-ejs-layouts'
 import session from 'express-session'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import cookieParser from 'cookie-parser'
 import { router } from './routes/mainRouter.js'
 import { setBaseURL } from './middleware/setBaseURL.js'
 import { errorHandler } from './middleware/errorHandler.js'
@@ -20,9 +21,10 @@ try {
     console.log(`Base URL: ${baseURL}`)
     app.use(setBaseURL(baseURL))
 
-    // Middleware to parse URL-encoded bodies
+    // Middleware to parse URL-encoded bodies and cookies
     const directoryFullName = dirname(fileURLToPath(import.meta.url))
     app.use(express.urlencoded({ extended: true }))
+    app.use(cookieParser())
 
     // Apply ejs layouts, set view engine and static files
     app.use(expressLayouts)
