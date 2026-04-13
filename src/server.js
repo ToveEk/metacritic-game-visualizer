@@ -3,11 +3,13 @@ dotenv.config()
 
 import express from 'express'
 import expressLayouts from 'express-ejs-layouts'
+import session from 'express-session'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { router } from './routes/mainRouter.js'
 import { setBaseURL } from './middleware/setBaseURL.js'
 import { errorHandler } from './middleware/errorHandler.js'
+import { sessionOptions } from './config/session.js'
 
 try {
     // Initialize Express app
@@ -29,6 +31,9 @@ try {
     app.set('layout', 'default')
     app.set('layout extractScripts', true)
     app.set('layout extractStyles', true)
+
+    // Session management
+    app.use(session(sessionOptions))
 
     // Set up routes (before static files so dynamic routes take precedence)
     app.use('/', router)
