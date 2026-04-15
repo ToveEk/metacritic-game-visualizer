@@ -1,4 +1,25 @@
 <div>
     <h1>Games</h1>
     <p>Welcome to the Games page!</p>
+
+    <ul>
+        <% games.forEach(game => { %>
+            <li>
+                <h2><%= game.title %></h2>
+                <p>Metascore: <%= game.metascore %></p>
+                <p>Userscore: <%= game.userscore %></p>
+                <p>Platform: <%= game.platforms.map(platform => platform.name).join(', ') %></p>
+                <p>Genre: <%= game.genres.map(genre => genre.name).join(', ') %></p>
+                <p>Developer: <%= game.developer %></p>
+            </li>
+        <% }) %>
+    </ul>
+
+    <% if (page > 1) { %>
+        <button><a href="/games?page=<%= page - 1 %>">Previous</a></button>
+    <% } %>
+
+    <% if (hasNextPage === true) { %>
+        <button><a href="/games?page=<%= page + 1 %>">Next</a></button>
+    <% } %>
 </div>
