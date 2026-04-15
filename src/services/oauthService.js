@@ -8,8 +8,7 @@ export class OAuthService {
         this.redirectUri = process.env.GITHUB_REDIRECT_URI;
     }
 
-    getAuthUrl() {
-        const state = Math.random().toString(36).substring(2); // Generate a random state parameter to prevent CSRF attacks
+    getAuthUrl(state) {
         return `https://github.com/login/oauth/authorize?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}`;
     }
 
@@ -44,7 +43,7 @@ export class OAuthService {
     }
 
     async getApiToken(gitHubUser) {
-        const response = await fetch(`${process.env.WT1_API_URL}`, {
+        const response = await fetch(`${process.env.API_URL}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

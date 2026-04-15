@@ -15,7 +15,8 @@ export class AuthenticationController {
     }
 
     getAuthenticationUrl(req, res) {
-        const authUrl = this.oauthService.getAuthUrl();
+        const state = this.#generateRandomState(req);
+        const authUrl = this.oauthService.getAuthUrl(state);
         res.redirect(authUrl);
     }
 
@@ -47,9 +48,9 @@ export class AuthenticationController {
     #setHttpOnlyCookie(res, token) {
         res.cookie('jwt', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict', // Prevent CSRF attacks
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
+            maxAge: 7 * 24 * 60 * 60 * 1000
         })
     }
 
