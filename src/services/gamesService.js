@@ -47,7 +47,6 @@ export class GamesService {
 
             const data = await response.json();
 
-            console.log('Fetched games:', data.data.games);
             return data.data.games;
         } catch (error) {
             throw new Error('Failed to fetch games: ' + error.message);

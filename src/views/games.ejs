@@ -1,25 +1,26 @@
+<canvas id="gamesChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+    /* eslint-disable */
+    window.gamesData = <%- JSON.stringify(games) %>;
+    console.log('gamesData set to:', window.gamesData);
+    /* eslint-enable */
+</script>
+
+<script type="module">
+    import { ChartManager } from '/scripts/chart.js';
+    const chartManager = new ChartManager();
+    chartManager.initializeChart();
+</script>
+
 <div>
-    <h1>Games</h1>
-    <p>Welcome to the Games page!</p>
-
-    <ul>
-        <% games.forEach(game => { %>
-            <li>
-                <h2><%= game.title %></h2>
-                <p>Metascore: <%= game.metascore %></p>
-                <p>Userscore: <%= game.userscore %></p>
-                <p>Platform: <%= game.platforms.map(platform => platform.name).join(', ') %></p>
-                <p>Genre: <%= game.genres.map(genre => genre.name).join(', ') %></p>
-                <p>Developer: <%= game.developer %></p>
-            </li>
-        <% }) %>
-    </ul>
-
-    <% if (page > 1) { %>
+    <% if (page> 1) { %>
         <button><a href="/games?page=<%= page - 1 %>">Previous</a></button>
-    <% } %>
+        <% } %>
 
-    <% if (hasNextPage === true) { %>
-        <button><a href="/games?page=<%= page + 1 %>">Next</a></button>
-    <% } %>
+            <% if (hasNextPage===true) { %>
+                <button><a href="/games?page=<%= page + 1 %>">Next</a></button>
+                <% } %>
 </div>
