@@ -1,6 +1,9 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
+/**
+ * Service for handling OAuth authentication with GitHub.
+ */
 export class OAuthService {
     constructor() {
         this.clientId = process.env.GITHUB_CLIENT_ID;
@@ -8,10 +11,22 @@ export class OAuthService {
         this.redirectUri = process.env.GITHUB_REDIRECT_URI;
     }
 
+    /**
+     * Generates the OAuth authorization URL.
+     * 
+     * @param {string} state - The state parameter for CSRF protection.
+     * @returns {string} The OAuth authorization URL.
+     */
     getAuthUrl(state) {
         return `https://github.com/login/oauth/authorize?client_id=${this.clientId}&redirect_uri=${this.redirectUri}&state=${state}`;
     }
 
+    /**
+     * Exchanges an authorization code for an access token.
+     * 
+     * @param {string} code - The authorization code.
+     * @returns {Promise<string>} The access token.
+     */
     async exchangeCodeForToken(code) {
         const response = await fetch('https://github.com/login/oauth/access_token', {
             method: 'POST',
@@ -31,6 +46,12 @@ export class OAuthService {
 
     }
 
+    /**
+     * Retrieves user data from GitHub.
+     * 
+     * @param {string} accessToken - The access token.
+     * @returns {Promise<object>} The user data.
+     */
     async getGitHubUserData(accessToken) {
         const response = await fetch('https://api.github.com/user', {
             headers: {
@@ -42,6 +63,12 @@ export class OAuthService {
 
     }
 
+    /**
+     * Retrieves an API token for the authenticated user.
+     * 
+     * @param {object} gitHubUser - The GitHub user object.
+     * @returns {Promise<string>} The API token.
+     */
     async getApiToken(gitHubUser) {
         const response = await fetch(`${process.env.API_URL}`, {
             method: 'POST',
