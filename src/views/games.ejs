@@ -1,19 +1,17 @@
+<div class="chart-controls">
+    <button data-chart="metascore">Metascore</button>
+    <button data-chart="release">Release Timeline</button>
+</div>
+
 <canvas id="gamesChart"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <script>
-    /* eslint-disable */
-    window.gamesData = <%- JSON.stringify(games) %>;
-    console.log('gamesData set to:', window.gamesData);
-    /* eslint-enable */
+    window.gamesData = <% - JSON.stringify(games) %>;
 </script>
 
-<script type="module">
-    import { ChartManager } from '/scripts/chart.js';
-    const chartManager = new ChartManager();
-    chartManager.initializeChart();
-</script>
+<script type="module" src="/scripts/app.js"></script>
 
 <div>
     <% if (page> 1) { %>
