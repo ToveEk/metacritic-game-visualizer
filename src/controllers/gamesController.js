@@ -16,21 +16,17 @@ export class GamesController {
      */
     async renderGamesPage(req, res) {
         try {
-            const page = parseInt(req.query.page) || 1;
-            const limit = 10;
-            const offset = (page - 1) * limit;
 
-            const games = await this.gamesService.getGames({ limit, offset });
+            const games = await this.gamesService.getGames({});
+            const releasesPerYear = await this.gamesService.getReleasesPerYear();
 
             res.render('games', {
                 games: games.games,
                 totalCount: games.totalCount,
-                hasNextPage: games.hasNextPage,
-                page
+                releasesPerYear
             });
         } catch (error) {
             throw new Error('Failed to fetch games: ' + error.message);
         }
-
     }
 }

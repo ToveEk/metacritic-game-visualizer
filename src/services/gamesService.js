@@ -53,13 +53,7 @@ export class GamesService {
         }
     }
 
-    /**
-     * Fetches a game by its ID.
-     * 
-     * @param {number} id - The ID of the game to fetch.
-     * @returns {Promise<Object>} A promise resolving to the fetched game.
-     */
-    async getGameById(id) {
+    async getReleasesPerYear(platform) {
         try {
             const response = await fetch(this.apiUrl, {
                 method: 'POST',
@@ -68,27 +62,22 @@ export class GamesService {
                 },
                 body: JSON.stringify({
                     query: `
-                    query Game($gameId: Int!) {
-                        game(id: $gameId) {
-                        id title metascore userscore description
-                        developer publisher release_date
-                        genres { name }
-                        platforms { name }
+                    query ReleasesPerYear($platform: String) {
+                        releasesPerYear(platform: $platform) {
+                            year
+                            release_count
+                        }
                     }
-                }
-            `,
+                `,
                     variables: {
-                        gameId: id
+                        platform
                     }
                 })
             });
-
             const data = await response.json();
-
-            console.log('Fetched game:', data.data.game);
-            return data.data.game;
+            return data.data.releasesPerYear;
         } catch (error) {
-            throw new Error('Failed to fetch game: ' + error.message);
+            throw new Error('Failed to fetch release data: ' + error.message);
         }
     }
 }

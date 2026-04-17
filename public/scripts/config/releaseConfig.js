@@ -6,7 +6,9 @@ import { ChartConfig } from './chartConfig.js';
 export class ReleaseLineConfig extends ChartConfig {
     constructor(gamesData) {
         const grouped = ReleaseLineConfig.#groupByyear(gamesData);
-        const sorted = Object.keys(grouped).sort((a, b) => a - b);
+        const sorted = Object.keys(grouped)
+            .map(Number)
+            .sort((a, b) => a - b);
 
         super('line', {
             labels: sorted,
@@ -20,8 +22,39 @@ export class ReleaseLineConfig extends ChartConfig {
             }]
         },
             {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year'
+                        }
+                    }
+                }
             }
         )
+    }
+
+
+    filterByYear(gamesData, minYear, maxYear) {
+        const grouped = ReleaseLineConfig.#groupByyear(gamesData);
+        const labels = Object.keys(grouped).sort((a, b) => a - b)
+            .map(Number)
+            .filter(year => {
+                if (minYear && year < minYear) return false;
+                if (maxYear && year > maxYear) return false;
+                return true;
+            })
+            .sort((a, b) => a - b);
+
+        return { labels, data: labels.map(year => grouped[year] || 0) };
+    }
+
+    filterByPlatform(gamesData, platform) {
+        const filteredGames = gamesData.filter(game => game.platforms.some(p => p.name.toLowerCase() === platform.toLowerCase()));
+        return this.filterByYear(filteredGames);
     }
 
     /**
@@ -32,10 +65,12 @@ export class ReleaseLineConfig extends ChartConfig {
      */
     static #groupByyear(gamesData) {
         return gamesData.reduce((acc, game) => {
-            const year = new Date(game.releaseDate).getFullYear();
+            const year = new Date(game.release_date).getFullYear();
+
             if (!isNaN(year)) {
                 acc[year] = (acc[year] || 0) + 1;
             }
+
             return acc;
         }, {});
     }
