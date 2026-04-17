@@ -1,24 +1,26 @@
-<div class="chart-controls">
-    <button data-chart="metascore">Metascore</button>
-    <button data-chart="release">Release Timeline</button>
-</div>
-
 <canvas id="gamesChart"></canvas>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <script>
-    window.gamesData = <% - JSON.stringify(games) %>;
+    window.gamesData = <%- JSON.stringify(games) %>;
+    window.releasesPerYear = <%- JSON.stringify(releasesPerYear) %>;
 </script>
 
 <script type="module" src="/scripts/app.js"></script>
 
-<div>
-    <% if (page> 1) { %>
-        <button><a href="/games?page=<%= page - 1 %>">Previous</a></button>
-        <% } %>
+<div id="yearFilter">
+    <label>From: <input type="number" id="minYear"></label>
+    <label>To: <input type="number" id="maxYear"></label>
+    <button id="yearFilterButton">Filter By Year</button>
+</div>
 
-            <% if (hasNextPage===true) { %>
-                <button><a href="/games?page=<%= page + 1 %>">Next</a></button>
-                <% } %>
+<div id="platformFilter">
+    <label>Enter platform: <input type="text" id="platformInput"></label>
+    <button id="platformFilterButton">Filter By Platform</button>
+</div>
+
+<div id="removeDataset">
+    <label>Remove Dataset: <input type="text" id="datasetInput"></label>
+    <button id="removeDatasetButton">Remove Dataset</button>
 </div>
