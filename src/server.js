@@ -46,6 +46,12 @@ try {
         next()
     })
 
+    // Middleware to make jwt available in all views
+    app.use((req, res, next) => {
+        res.locals.jwt = req.cookies.jwt || null
+        next()
+    })
+
     // Set up routes (before static files so dynamic routes take precedence)
     app.use('/', router)
 

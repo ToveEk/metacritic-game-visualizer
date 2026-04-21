@@ -1,0 +1,15 @@
+<header>
+    <nav>
+        <div class="nav-left">
+            <h1><a href="<%= baseURL %>">Metacritic Game Data</a></h1>
+        </div>
+        <div class="nav-right">
+            <a href="<%= baseURL %>games">Games</a>
+            <% if (jwt) { %>
+                <a href="<%= baseURL %>logout">Log out</a>
+                <% } else { %>
+                    <a href="<%= baseURL %>login">Log in</a>
+                    <% } %>
+        </div>
+    </nav>
+</header>

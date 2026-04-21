@@ -12,11 +12,12 @@
     </head>
 
     <body>
-        <main>
-            <%- include('flash') %>
-                <%- body %>
-        </main>
-        <%- defineContent('script') %>
+        <%- include('header') %>
+            <main>
+                <%- include('flash') %>
+                    <%- body %>
+            </main>
+            <%- defineContent('script') %>
     </body>
 
 </html>
