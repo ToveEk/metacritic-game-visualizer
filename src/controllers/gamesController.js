@@ -16,7 +16,6 @@ export class GamesController {
      */
     async renderGamesPage(req, res) {
         try {
-
             const games = await this.gamesService.getGames({});
             const releasesPerYear = await this.gamesService.getReleasesPerYear();
 
@@ -26,7 +25,8 @@ export class GamesController {
                 releasesPerYear
             });
         } catch (error) {
-            throw new Error('Failed to fetch games: ' + error.message);
+            req.session.flash = { type: 'error', message: 'Failed to load games: ' + error.message };
+            res.redirect('/');
         }
     }
 }

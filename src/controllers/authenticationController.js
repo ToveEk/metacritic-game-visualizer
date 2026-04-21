@@ -46,6 +46,11 @@ export class AuthenticationController {
             this.#validateState(req);
 
             const { code } = req.query;
+
+            if (!code) {
+                throw new Error('Authorization code is missing');
+            }
+
             const accessToken = await this.oauthService.exchangeCodeForToken(code);
             const gitHubUserData = await this.oauthService.getGitHubUserData(accessToken);
             const jwt = await this.oauthService.getApiToken(gitHubUserData);
@@ -54,8 +59,8 @@ export class AuthenticationController {
 
             res.redirect('/games');
         } catch (error) {
-            console.error('Error during OAuth callback:', error);
-            res.status(500).send('Authentication failed');
+            req.session.flash = { type: 'error', message: 'Authentication failed: ' + error.message };
+            res.redirect('/login');
         }
     }
 

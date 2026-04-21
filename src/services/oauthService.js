@@ -41,9 +41,14 @@ export class OAuthService {
                 redirect_uri: this.redirectUri
             })
         });
-        const data = await response.json();
-        return data.access_token;
 
+        const data = await response.json();
+
+        if (!data.access_token) {
+            throw new Error('Failed to exchange code for token: ' + (data.error_description || 'Unknown error'));
+        }
+
+        return data.access_token;
     }
 
     /**
@@ -58,7 +63,12 @@ export class OAuthService {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
+
         const userData = await response.json();
+
+        if (!userData.id) {
+            throw new Error('Failed to retrieve GitHub user data');
+        }
         return userData;
 
     }
@@ -85,7 +95,17 @@ export class OAuthService {
                 `
             })
         });
+
         const data = await response.json();
+
+        if (data.errors) {
+            throw new Error('Failed to retrieve API token: ' + data.errors[0].message);
+        }
+
+        if (!data.data.loginWithGitHub.token) {
+            throw new Error('No token returned from API');
+        }
+
         return data.data.loginWithGitHub.token;
     }
 }
