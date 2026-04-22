@@ -16,10 +16,8 @@ export class AuthenticationController {
      */
     renderLoginPage(req, res) {
         const state = this.#generateRandomState(req);
-        res.render('login', {
-            client_id: process.env.GITHUB_CLIENT_ID,
-            state
-        }
+        const authUrl = this.oauthService.getAuthUrl(state);
+        res.render('login', { authUrl }
         )
     }
 
@@ -90,7 +88,7 @@ export class AuthenticationController {
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
     }
-    
+
     /**
      * Validates the state parameter to prevent CSRF attacks.
      * @param {object} req - The request object.
