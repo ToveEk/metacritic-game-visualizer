@@ -9,22 +9,39 @@ const releaseConfig = new ReleaseLineConfig(gamesData);
 
 chartManager.initializeChart(releaseConfig);
 
-document.getElementById('yearFilterButton').addEventListener('click', () => {
+document.getElementById('yearFilterButton').addEventListener('click', async () => {
     const minYear = parseInt(document.getElementById('minYear').value);
     const maxYear = parseInt(document.getElementById('maxYear').value);
-    const { labels, data } = releaseConfig.filterByYear(gamesData, minYear, maxYear);
+
+    document.getElementById('yearFilterButton').textContent = 'Loading...';
+
+    const url = `/games/data?minYear=${minYear}&maxYear=${maxYear}`;
+    const response = await fetch(url);
+    const releasesPerYear = await response.json();
+
+    const labels = releasesPerYear.map(release => release.year);
+    const data = releasesPerYear.map(release => release.release_count);
+
     chartManager.updateChart(labels, data);
+
+    document.getElementById('yearFilterButton').textContent = 'Filter by Year';
 });
 
-document.getElementById('platformFilterButton').addEventListener('click', () => {
+document.getElementById('platformFilterButton').addEventListener('click', async () => {
     const platform = document.getElementById('platformInput').value.trim();
-    if (platform) {
-        const { labels, data } = releaseConfig.filterByPlatform(gamesData, platform);
-        chartManager.addDataset(`Platform: ${platform}`, labels, data, randomColor());
-    } else {
-        const { labels, data } = releaseConfig.filterByYear(gamesData);
-        chartManager.updateChart(labels, data);
-    }
+
+    document.getElementById('platformFilterButton').textContent = 'Loading...';
+
+    const url = platform ? `/games/data?platform=${platform}` : '/games/data';
+    const response = await fetch(url);
+    const releasesPerYear = await response.json();
+
+    const labels = releasesPerYear.map(release => release.year);
+    const data = releasesPerYear.map(release => release.release_count);
+    
+    chartManager.addDataset(`Platform: ${platform}`, labels, data, randomColor());
+
+    document.getElementById('platformFilterButton').textContent = 'Filter by Platform';
 });
 
 document.getElementById('removeDatasetButton').addEventListener('click', () => {
