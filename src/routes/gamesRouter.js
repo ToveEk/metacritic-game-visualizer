@@ -9,3 +9,7 @@ export const gamesRouter = express.Router()
 gamesRouter.get('/games', requireAuth, (req, res) => {
     gamesController.renderGamesPage(req, res)
 })
+
+gamesRouter.get('/games/data', requireAuth, (req, res) => {
+    gamesController.getFilteredGames(req, res)
+})

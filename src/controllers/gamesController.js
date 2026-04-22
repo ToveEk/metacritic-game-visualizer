@@ -16,17 +16,29 @@ export class GamesController {
      */
     async renderGamesPage(req, res) {
         try {
-            const games = await this.gamesService.getGames({});
-            const releasesPerYear = await this.gamesService.getReleasesPerYear();
+            const token = req.cookies.jwt;
+            const { minYear, maxYear } = req.query;
+            const releasesPerYear = await this.gamesService.getReleasesPerYear(undefined, token, parseInt(minYear), parseInt(maxYear));
 
             res.render('games', {
-                games: games.games,
-                totalCount: games.totalCount,
+                games: [], // Pass an empty array for now, as the games data is not being fetched
+                totalCount: 0, // Pass 0 for now, as the games data is not being fetched
                 releasesPerYear
             });
         } catch (error) {
             req.session.flash = { type: 'error', message: 'Failed to load games: ' + error.message };
             res.redirect('/');
+        }
+    }
+
+    async getFilteredGames(req, res) {
+        try {
+            const { platform, minYear, maxYear } = req.query;
+            const token = req.cookies.jwt;
+            const releasesPerYear = await this.gamesService.getReleasesPerYear(platform, token, parseInt(minYear), parseInt(maxYear));
+            res.json(releasesPerYear);
+        } catch (error) {
+            res.status(500).json({ error: 'Failed to fetch games: ' + error.message });
         }
     }
 }
