@@ -9,10 +9,6 @@ authenticationRouter.get('/login', (req, res) => {
     auth.renderLoginPage(req, res)
 })
 
-authenticationRouter.get('/login', (req, res) => {
-    auth.authenticateUser(req, res)
-})
-
 authenticationRouter.get('/auth/github/callback', (req, res) => {
     auth.handleOAuthCallback(req, res)
 })
