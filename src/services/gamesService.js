@@ -53,6 +53,12 @@ export class GamesService {
         }
     }
 
+    /**
+     * Gets the number of game releases per year, optionally filtered by platform.
+     *
+     * @param {string} platform - The platform to filter by.
+     * @returns {Promise<Array>} A promise resolving to the list of release counts per year.
+     */
     async getReleasesPerYear(platform) {
         try {
             const response = await fetch(this.apiUrl, {
@@ -75,6 +81,7 @@ export class GamesService {
                 })
             });
             const data = await response.json();
+
             return data.data.releasesPerYear;
         } catch (error) {
             throw new Error('Failed to fetch release data: ' + error.message);

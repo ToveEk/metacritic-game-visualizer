@@ -37,7 +37,14 @@ export class ReleaseLineConfig extends ChartConfig {
         )
     }
 
-
+    /**
+     * Filters games by release year.
+     *
+     * @param {object[]} gamesData - An array of game objects.
+     * @param {number} minYear - The minimum year to include.
+     * @param {number} maxYear - The maximum year to include.
+     * @returns {object} - An object with labels and data for the filtered games.
+     */
     filterByYear(gamesData, minYear, maxYear) {
         const grouped = ReleaseLineConfig.#groupByyear(gamesData);
         const labels = Object.keys(grouped).sort((a, b) => a - b)
@@ -52,6 +59,13 @@ export class ReleaseLineConfig extends ChartConfig {
         return { labels, data: labels.map(year => grouped[year] || 0) };
     }
 
+    /**
+     * Filters games by platform.
+     * 
+     * @param {object[]} gamesData - An array of game objects.
+     * @param {string} platform - The platform to filter by.
+     * @returns {object} - An object with labels and data for the filtered games.
+     */
     filterByPlatform(gamesData, platform) {
         const filteredGames = gamesData.filter(game => game.platforms.some(p => p.name.toLowerCase() === platform.toLowerCase()));
         return this.filterByYear(filteredGames);

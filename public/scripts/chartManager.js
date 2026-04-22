@@ -1,8 +1,16 @@
+/**
+ * ChartManager class to handle chart creation and updates using Chart.js
+ */
 export class ChartManager {
     constructor() {
         this.chart = null;
     }
 
+    /**
+     * Initializes the chart with the given configuration.
+     * 
+     * @param {object} config - The chart configuration object.
+     */
     async initializeChart(config) {
         const ctx = document.getElementById('gamesChart').getContext('2d');
 
@@ -20,6 +28,13 @@ export class ChartManager {
         });
     }
 
+    /**
+     * Updates the chart with new labels and data.
+     * 
+     * @param {string[]} labels - The new labels for the chart.
+     * @param {number[]} data - The new data for the chart.
+     * @returns {Promise<void>}
+     */
     async updateChart(labels, data) {
         if (!this.chart) return;
 
@@ -28,6 +43,15 @@ export class ChartManager {
         this.chart.update();
     }
 
+    /**
+     * Adds a new dataset to the chart.
+     * 
+     * @param {string} label - The label for the new dataset.
+     * @param {string[]} labels - The labels for the chart.
+     * @param {number[]} data - The data for the new dataset.
+     * @param {string} color - The color for the new dataset.
+     * @returns {Promise<void>}
+     */
     async addDataset(label, labels, data, color) {
         if (!this.chart) return;
 
@@ -46,6 +70,12 @@ export class ChartManager {
         this.chart.update();
     }
 
+    /**
+     * Removes a dataset from the chart.
+     * 
+     * @param {string} label - The label of the dataset to remove.
+     * @returns {Promise<void>}
+     */
     removeDataset(label) {
         if (!this.chart) return;
 
