@@ -10,73 +10,41 @@ export class GamesService {
     }
 
     /**
-     * Fetches a list of games based on the provided criteria.
-     * 
-     * @param {Object} param - The criteria for fetching games.
-     * @param {string} param.title - The title of the games to fetch.
-     * @param {number} param.minMetascore - The minimum metascore of the games to fetch.
-     * @param {number} param.limit - The maximum number of games to fetch.
-     * @param {number} param.offset - The offset for pagination.
-     * @returns {Promise<Array>} A promise resolving to the list of fetched games.
-     */
-    async getGames({ title, minMetascore, limit, offset }) {
-        try {
-            const response = await fetch(this.apiUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    query: `
-                    query Games($title: String, $minMetascore: Int, $limit: Int, $offset: Int) {
-                        games(title: $title, minMetascore: $minMetascore, limit: $limit, offset: $offset) {
-                            games { id title metascore userscore genres { name } platforms { name } developer publisher release_date description }
-                            totalCount
-                            hasNextPage
-                        }
-                    }
-                `,
-                    variables: {
-                        title,
-                        minMetascore,
-                        limit,
-                        offset
-                    }
-                })
-            });
-
-            const data = await response.json();
-
-            return data.data.games;
-        } catch (error) {
-            throw new Error('Failed to fetch games: ' + error.message);
-        }
-    }
-
-    /**
      * Gets the number of game releases per year, optionally filtered by platform.
      *
      * @param {string} platform - The platform to filter by.
+     * @param {string} token - The authentication token.
+     * @param {number} minYear - The minimum year to filter by.
+     * @param {number} maxYear - The maximum year to filter by.
      * @returns {Promise<Array>} A promise resolving to the list of release counts per year.
      */
-    async getReleasesPerYear(platform) {
+    async getReleasesPerYear(platform, token, minYear, maxYear) {
         try {
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+
+
             const response = await fetch(this.apiUrl, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: JSON.stringify({
                     query: `
-                    query ReleasesPerYear($platform: String) {
-                        releasesPerYear(platform: $platform) {
+                    query ReleasesPerYear($platform: String, $minYear: Int, $maxYear: Int) {
+                        releasesPerYear(platform: $platform, minYear: $minYear, maxYear: $maxYear) {
                             year
                             release_count
                         }
                     }
                 `,
                     variables: {
-                        platform
+                        platform,
+                        minYear,
+                        maxYear
                     }
                 })
             });
