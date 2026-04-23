@@ -1,26 +1,40 @@
-<canvas id="gamesChart"></canvas>
+<div class="games-container">
+    <div class="chart-section">
+        <canvas id="gamesChart"></canvas>
+    </div>
+
+    <div class="filter-section">
+        <h3>📅 Filter by Year</h3>
+        <div id="yearFilter">
+            <label>From: <input type="number" id="minYear" placeholder="Min year"></label>
+            <label>To: <input type="number" id="maxYear" placeholder="Max year"></label>
+            <button id="yearFilterButton">Filter By Year</button>
+        </div>
+    </div>
+
+    <div class="filter-section">
+        <h3>💻 Filter by Platform</h3>
+        <div id="platformFilter">
+            <label>Enter platform: <input type="text" id="platformInput"
+                    placeholder="e.g., PC, Playstation, Xbox"></label>
+            <button id="platformFilterButton">Filter By Platform</button>
+        </div>
+    </div>
+
+    <div class="filter-section">
+        <h3>🗑️ Remove Dataset</h3>
+        <div id="removeDataset">
+            <label>Remove Dataset: <input type="text" id="datasetInput" placeholder="Dataset name"></label>
+            <button id="removeDatasetButton">Remove Dataset</button>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <script>
-    window.gamesData = <%- JSON.stringify(games) %>;
-    window.releasesPerYear = <%- JSON.stringify(releasesPerYear) %>;
+    window.gamesData = <% - JSON.stringify(games) %>;
+    window.releasesPerYear = <% - JSON.stringify(releasesPerYear) %>;
 </script>
 
 <script type="module" src="/scripts/app.js"></script>
-
-<div id="yearFilter">
-    <label>From: <input type="number" id="minYear"></label>
-    <label>To: <input type="number" id="maxYear"></label>
-    <button id="yearFilterButton">Filter By Year</button>
-</div>
-
-<div id="platformFilter">
-    <label>Enter platform: <input type="text" id="platformInput"></label>
-    <button id="platformFilterButton">Filter By Platform</button>
-</div>
-
-<div id="removeDataset">
-    <label>Remove Dataset: <input type="text" id="datasetInput"></label>
-    <button id="removeDatasetButton">Remove Dataset</button>
-</div>
