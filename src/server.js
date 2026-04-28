@@ -34,6 +34,9 @@ try {
     app.set('layout extractScripts', true)
     app.set('layout extractStyles', true)
 
+    // Trust railway proxy
+    app.set('trust proxy', 1)
+
     // Session management
     app.use(session(sessionOptions))
 
