@@ -12,7 +12,7 @@ export const sessionOptions = {
     saveUninitialized: true,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24,
-        sameSite: 'strict',
+        sameSite: 'lax',
         secure: process.env.NODE_ENV === 'production'
     }
 }
