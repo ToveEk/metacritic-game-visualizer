@@ -84,7 +84,7 @@ export class AuthenticationController {
         res.cookie('jwt', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'Strict', // Prevent CSRF attacks
+            sameSite: 'Lax', // Prevent CSRF attacks while allowing OAuth redirects
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
     }
